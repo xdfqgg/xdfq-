@@ -1,65 +1,69 @@
-import Image from "next/image";
+// ============================================================
+// app/page.tsx — 首页（路由：/）
+//
+// 类型：Server Component
+//       在服务端读取所有文章，生成 HTML 发给浏览器。
+//       里面的 <Avatar /> 和 <PostList /> 是客户端组件，
+//       Next.js 会先服务端渲染它们的初始 HTML，
+//       浏览器加载后再「注水」(hydrate) 变成可交互的组件。
+//
+// 工作流程：
+//   1. getAllPosts() 在构建/请求时扫描 content/posts/ 目录
+//   2. 把文章元信息传给 PostList（客户端组件）
+//   3. PostList 渲染卡片 + anime.js 做入场动画
+// ============================================================
+
+import { getAllPosts } from "@/lib/posts";
+import PostList from "@/components/PostList";
+import Avatar from "@/components/Avatar";
 
 export default function Home() {
+  // getAllPosts 只能在服务端跑（用了 Node.js 的 fs 模块）
+  const posts = getAllPosts();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    // max-w-3xl：最大宽度 48rem（大约 768px），内容不会太宽
+    // mx-auto：水平居中
+    // px-6：左右内边距 1.5rem（手机上也留白）
+    // py-16：上下内边距 4rem
+    <div className="max-w-3xl mx-auto px-6 py-16">
+      {/*
+        ====== 头部介绍区域 ======
+        flex items-center：横向排列，垂直居中
+        gap-6：头像和文字之间间距 1.5rem
+        小屏幕上可能换行，看着也不错
+      */}
+      <section className="mb-16 flex items-center gap-6">
+        {/*
+          Avatar — 客户端组件
+          先渲染占位圆/照片，然后在浏览器里播放入场动画
+        */}
+        <Avatar
+          src="/avatar.jpg"    // ← 替换成你的头像路径
+          initials="XD"         // ← 替换成你的首字母
+          size={96}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-amber-950 dark:text-amber-50 mb-2">
+            Hey, I&apos;m XDFQ 👋
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg text-amber-700 dark:text-amber-300 leading-relaxed">
+            Welcome to my blog. I write about things I learn, build, and think about.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
+
+      {/*
+        ====== 文章列表区域 ======
+        uppercase tracking-widest — 全大写 + 宽字母间距（装饰性小标题）
+        PostList 是客户端组件，接收 posts 数据并做入场动画
+      */}
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-6">
+          Posts
+        </h2>
+        <PostList posts={posts} />
+      </section>
     </div>
   );
 }

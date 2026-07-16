@@ -1,26 +1,102 @@
+/* ============================================================
+ * globals.css — 全局样式
+ *
+ * 这个文件里的样式会影响整个网站的每一个页面。
+ * 它被 app/layout.tsx import，然后作用到所有子页面。
+ *
+ * Tailwind CSS v4 的工作方式：
+ *   @import "tailwindcss"  → 加载 Tailwind 的所有工具类
+ *   @plugin "..."          → 加载额外的插件
+ *   @theme inline { ... }  → 定义 CSS 变量（颜色、字体等）
+ *
+ * 暗色模式是怎么工作的？
+ *   @media (prefers-color-scheme: dark) 检测操作系统设置
+ *   不用 JS，纯 CSS 自动切换
+ *   用户系统是暗色 → 自动用 dark 下的变量值
+ *   所有组件的 dark:xxx class 也会对应启用
+ * ============================================================ */
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ----------------------------------------------------------
+ * @tailwindcss/typography 插件
+ *
+ * 提供 prose class，给长文章自动排版：
+ *   - 标题有层次感（h1 > h2 > h3）
+ *   - 段落行距舒适
+ *   - 列表缩进正确
+ *   - 图片不会溢出
+ *
+ * 文章详情页用 prose prose-amber 就会套上这个排版
+ * ---------------------------------------------------------- */
+@plugin "@tailwindcss/typography";
 
+/* ----------------------------------------------------------
+ * @theme inline — 定义全局 CSS 变量
+ *
+ * var(--background) 读取 :root 里定义的 --background 值
+ * 这样做的好处是：组件里用 bg-background 就能引用主题色
+ * 改主题只需要改 :root 的两行变量
+ * ---------------------------------------------------------- */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans);   /* Geist 字体（Vercel 出品） */
+  --font-mono: var(--font-geist-mono);   /* 等宽字体，代码块用 */
 }
 
+/* ----------------------------------------------------------
+ * :root — 默认（亮色）主题变量
+ *
+ * 这里的变量是整个网站的颜色基准
+ * 替换颜色就是改这两行：
+ *   --background: #fffbeb  → 你的背景色
+ *   --foreground: #451a03  → 你的文字色
+ * ---------------------------------------------------------- */
+:root {
+  --background: #fffbeb;   /* amber-50，浅黄色的暖调背景 */
+  --foreground: #451a03;   /* amber-950，深棕色文字 */
+}
+
+/* ----------------------------------------------------------
+ * 暗色模式
+ *
+ * 用户设备设为暗色主题时自动生效
+ * 背景变成深棕色，文字变成浅奶油色
+ * ---------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1c1917;  /* stone-900，暗色背景 */
+    --foreground: #fef3c7;  /* amber-100，浅色文字 */
   }
 }
 
+/* ----------------------------------------------------------
+ * body — 页面基础样式
+ *
+ * sans-serif 是字体族的「兜底」：
+ *   如果 Geist 加载失败 → 用 Arial → 用系统默认 sans-serif
+ * ---------------------------------------------------------- */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ----------------------------------------------------------
+ * rehype-pretty-code 生成的代码块微调
+ *
+ * 这个插件会给 <pre><code> 加上内联颜色样式
+ * 下面的规则去掉 code 包裹的背景和内边距，
+ * 让 pre 的背景完整覆盖整个代码块
+ * ---------------------------------------------------------- */
+pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.875rem;  /* 14px，比正文略小 */
+}
+
+/* 行内 code 也保持统一字号 */
+code {
+  font-size: 0.875em !important;
 }

@@ -1,34 +1,89 @@
+// ============================================================
+// tsconfig.json — TypeScript 编译器的配置文件
+//
+// TypeScript 是 JavaScript 的超集，加了「类型检查」。
+// 这个文件告诉 TS 编译器：
+//   - 用多严格的规则检查代码
+//   - 怎么解析 import 路径（比如 @/components/xxx）
+//   - 目标 JS 版本是什么
+// ============================================================
+
 {
   "compilerOptions": {
+    // target — 编译出的 JS 代码兼容到哪个 ES 版本
+    // ES2017 意味着支持 async/await、Object.entries 等
     "target": "ES2017",
+
+    // lib — 告诉 TS「运行环境有哪些 API 可用」
+    // "dom" = 浏览器 API（document, window, setTimeout...）
+    // "dom.iterable" = 可迭代的 DOM 集合
+    // "esnext" = 最新的 ES 特性
     "lib": ["dom", "dom.iterable", "esnext"],
+
+    // allowJs — 允许在 TS 项目里 import .js 文件
     "allowJs": true,
+
+    // skipLibCheck — 跳过 .d.ts 类型文件的检查（加快编译）
     "skipLibCheck": true,
+
+    // strict — 开启所有严格类型检查（如不能把 null 赋给 string）
     "strict": true,
+
+    // noEmit — 不输出编译后的 JS
+    //（Next.js 用 swc/turbopack 做编译，TS 只负责类型检查）
     "noEmit": true,
+
+    // esModuleInterop — 让 import 行为兼容 CommonJS 模块
     "esModuleInterop": true,
+
+    // module — 输出什么模块格式
+    // "esnext" = 保持 ES Module 语法，让打包器自己处理
     "module": "esnext",
+
+    // moduleResolution — 怎么查找 import 的文件
+    // "bundler" = 按打包器（webpack/turbopack）的方式解析
     "moduleResolution": "bundler",
+
+    // resolveJsonModule — 允许直接 import .json 文件
     "resolveJsonModule": true,
+
+    // isolatedModules — 把每个文件当独立模块编译（保证和打包器行为一致）
     "isolatedModules": true,
+
+    // jsx — JSX 语法怎么转换
+    // "react-jsx" = 自动导入 React（React 17+ 的新 JSX 转换）
     "jsx": "react-jsx",
+
+    // incremental — 增量编译（只编译改过的文件，更快）
     "incremental": true,
+
+    // plugins — TS 编辑器插件
+    // "next" 插件让 VSCode 能更好地理解 Next.js 的特殊语法
     "plugins": [
       {
         "name": "next"
       }
     ],
+
+    // paths — 路径别名
+    // "@/*" 映射到 "./*"（即项目根目录）
+    // 所以 import xxx from "@/components/Avatar"
+    //   = import xxx from "./components/Avatar"
     "paths": {
       "@/*": ["./*"]
     }
   },
+
+  // include — 哪些文件需要被 TypeScript 检查
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "next-env.d.ts",          // Next.js 自动生成的类型声明
+    "**/*.ts",                // 所有 .ts 文件
+    "**/*.tsx",               // 所有 .tsx 文件（TS + JSX）
+    ".next/types/**/*.ts",    // Next.js 生成的构建类型
+    ".next/dev/types/**/*.ts", // 开发模式下的类型
+    "**/*.mts"                // 所有 .mts 文件（ES Module TS）
   ],
-  "exclude": ["node_modules"]
+
+  // exclude — 哪些文件不需要检查
+  "exclude": ["node_modules"] // 第三方依赖不检查
 }
