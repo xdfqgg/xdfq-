@@ -1,5 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 
+import CopyButton from"@/components/CopyButton"
+
 // ============================================================
 // mdx-components.tsx — MDX 的「翻译表」
 //
@@ -16,6 +18,14 @@ import type { MDXComponents } from "mdx/types";
 //
 // 这个文件必须在项目根目录，Next.js 会自动发现它
 // ============================================================
+function extractCodeText(children: React.ReactNode): string {
+    if (typeof children === "string") return children;
+    if (Array.isArray(children)) return children.map(extractCodeText).join("");
+    if (children && typeof children === "object" && "props" in children) {
+      return extractCodeText((children as any).props.children);
+    }
+    return "";
+  }
 
 const components: MDXComponents = {
   // ----------------------------------------------------------
@@ -80,9 +90,16 @@ const components: MDXComponents = {
   // overflow-x-auto: 代码太长时横向滚动，不会撑破页面
   // 深色背景保持代码可读性，不受页面浅黄色影响
   // ----------------------------------------------------------
-  pre: (props) => (
-    <pre className="rounded-lg overflow-x-auto my-4 p-4 bg-stone-900 text-amber-100 text-sm" {...props} />
-  ),
+   pre: (props) => {
+    // 从 props.children 里提取原始代码文本，给 CopyButton 用
+    const text = extractCodeText(props.children);
+    return (
+      <div className="relative group my-4">
+        <pre className="rounded-lg overflow-x-auto p-4 bg-stone-900 text-amber-100 text-sm" {...props} />
+        <CopyButton text={text} />
+      </div>
+    );
+  },
   code: (props) => (
     <code className="bg-amber-100 dark:bg-stone-800 rounded px-1.5 py-0.5 text-sm font-mono text-amber-900 dark:text-amber-200" {...props} />
   ),

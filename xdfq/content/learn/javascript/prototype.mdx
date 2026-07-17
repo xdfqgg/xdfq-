@@ -1,0 +1,15 @@
+---
+title: 原型链
+date: 2026-07-17
+order: 2
+---
+
+## 原型链是什么
+
+JavaScript 中每个对象都有一个内部指针指向它的原型对象，原型对象也有自己的原型，这样一层层上去就形成了原型链。
+
+```js
+const arr = [];
+console.log(arr.__proto__ === Array.prototype); // true
+console.log(Array.prototype.__proto__ === Object.prototype); // true
+```

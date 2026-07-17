@@ -1,0 +1,21 @@
+---
+title: 装饰器
+date: 2026-07-16
+order: 1
+---
+
+## Python 装饰器
+
+装饰器是一个接受函数作为参数并返回新函数的可调用对象。
+
+```python
+def log(func):
+    def wrapper(*args, **kwargs):
+        print(f"调用 {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+@log
+def greet(name):
+    return f"Hello, {name}"
+```

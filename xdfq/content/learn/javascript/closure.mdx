@@ -1,0 +1,28 @@
+---
+title: 闭包
+date: 2026-07-17
+order: 1
+---
+
+## 什么是闭包
+
+闭包是指一个函数可以记住并访问它的词法作用域，即使这个函数在它的词法作用域之外执行。
+
+```js
+function outer() {
+  const name = "JavaScript";
+  function inner() {
+    console.log(name);
+  }
+  return inner;
+}
+
+const fn = outer();
+fn(); // "JavaScript"
+```
+
+## 为什么需要闭包
+
+1. 数据私有化
+2. 工厂函数
+3. 模块模式

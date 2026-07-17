@@ -29,7 +29,7 @@ interface AvatarProps {
 }
 
 export default function Avatar({
-  src = "/avatar.jpg",
+  src = "/avatar.png",
   initials = "XD",
   size = 96,
 }: AvatarProps) {
