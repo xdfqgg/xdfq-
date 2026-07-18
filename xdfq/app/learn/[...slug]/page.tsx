@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLearnTree } from "@/lib/learn";
 import fs from "fs";
@@ -62,10 +63,20 @@ export default async function LearnDocPage({
   );
 
   return (
-    <article>
-      <div className="prose prose-amber dark:prose-invert max-w-none">
-        <DocContent />
-      </div>
-    </article>
+    <div>
+      {/* 返回 */}
+      <Link
+        href="/learn"
+        className="inline-block text-xl text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors mb-6"
+      >
+        {"<"}
+      </Link>
+
+      <article>
+        <div className="prose prose-amber dark:prose-invert max-w-none">
+          <DocContent />
+        </div>
+      </article>
+    </div>
   );
 }

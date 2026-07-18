@@ -57,11 +57,11 @@ export default function Header() {
             ease: "easeOutCubic",
           });
         }
-        // 加毛玻璃效果：半透明背景 + backdrop-blur（背景模糊）
+        // 滚动后：白色背景 + 毛玻璃 + 投影
         header.classList.add(
           "shadow-md",
-          "bg-amber-50/90",
-          "dark:bg-stone-900/90",
+          "bg-white/90",
+          "dark:bg-stone-800/90",
           "backdrop-blur"
         );
       } else {
@@ -76,8 +76,8 @@ export default function Header() {
         }
         header.classList.remove(
           "shadow-md",
-          "bg-amber-50/90",
-          "dark:bg-stone-900/90",
+          "bg-white/90",
+          "dark:bg-stone-800/90",
           "backdrop-blur"
         );
       }
@@ -100,7 +100,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 w-full py-6 transition-colors"
+      className="sticky top-0 z-50 w-full py-6 transition-colors bg-white/60 dark:bg-stone-800/60"
     >
       <div className="max-w-3xl mx-auto px-6 flex items-center justify-between">
         {/* 博客名 — 点它回到首页 */}

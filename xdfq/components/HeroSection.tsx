@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { animate } from "animejs";
 import Clock from "@/components/Clock";
+import MusicPlayer from "@/components/MusicPlayer";
 
 export default function HeroSection({ posts }: { posts: any[] }) {
   const avatarRef = useRef<HTMLDivElement>(null);
@@ -58,25 +59,13 @@ export default function HeroSection({ posts }: { posts: any[] }) {
             上层：横长空心矩形（左）+ 实心椭圆（右），并排一行
             ============================================================ */}
 
-        {/* Posts — 云朵 */}
-        <Link
-          href="/posts"
+        {/* 音乐播放器 — 替换云朵 Posts */}
+        <div
           data-shape
-          className="absolute left-[4%] top-[4%] w-[55%] h-20 flex items-center justify-center group"
+          className="absolute left-[0%] top-[4%] w-[55%]"
         >
-          <svg viewBox="0 0 160 56" className="absolute inset-0 w-full h-full">
-            <path
-              d="M20,48 Q8,44 8,34 Q4,20 22,18 Q24,6 40,6 Q52,-1 68,6 Q82,-2 100,8 Q116,-2 132,12 Q158,8 155,28 Q160,40 152,48 Q145,52 20,48 Z"
-              fill="white"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-amber-300 dark:text-amber-600 fill-white dark:fill-stone-800 group-hover:text-amber-400 group-hover:fill-amber-50 dark:group-hover:fill-stone-700 transition-all"
-            />
-          </svg>
-          <span className="relative z-10 text-xs font-bold text-amber-600 dark:text-amber-400 group-hover:text-amber-700 transition-colors">
-            📝 Posts
-          </span>
-        </Link>
+          <MusicPlayer />
+        </div>
 
         {/* 右侧 — 实心椭圆（背景填充，高度明显大于左侧矩形） */}
         <div
